@@ -630,9 +630,8 @@ ol.plan b { font-family: var(--font-display); }
       <div class="q" id="q-prof"><fieldset><legend>Welk profiel volg je?<span class="sub">Dubbelprofiel, zoals NT/NG? Kies er twee.</span></legend>
         <div class="choice">${PKEYS.map(k => `<input type="checkbox" name="prof" id="prof-${k}" value="${k}" ${prof.includes(k) ? "checked" : ""}><label for="prof-${k}"><b>${k}</b><span>${PROFILES[k].name}</span></label>`).join("")}</div>
       </fieldset></div>
-      <div class="q" id="q-wis"><fieldset><legend>Welke wiskunde volg je?</legend>
-        <div class="choice">${[["WA", "Wiskunde A"], ["WB", "Wiskunde B"], ["WC", "Wiskunde C"]].map(([k, n]) => `<input type="radio" name="wis" id="wis-${k}" value="${k}" ${A().wis === k ? "checked" : ""}><label for="wis-${k}"><b>${k}</b><span>${n}</span></label>`).join("")}</div>
-        <div class="choice"><input type="checkbox" name="wd" id="wis-WD" ${A().wd ? "checked" : ""}><label for="wis-WD"><b>+ WD</b><span>Ik volg ook wiskunde D (alleen samen met WB)</span></label></div>
+      <div class="q" id="q-wis"><fieldset><legend>Welke wiskunde volg je?<span class="sub">Kies A, B of C. Volg je ook wiskunde D? Vink dan ook WD aan.</span></legend>
+        <div class="choice">${[["WA", "Wiskunde A"], ["WB", "Wiskunde B"], ["WC", "Wiskunde C"]].map(([k, n]) => `<input type="radio" name="wis" id="wis-${k}" value="${k}" ${A().wis === k ? "checked" : ""}><label for="wis-${k}"><b>${k}</b><span>${n}</span></label>`).join("")}<input type="checkbox" name="wd" id="wis-WD" ${A().wd ? "checked" : ""}><label for="wis-WD"><b>+ WD</b><span>Wiskunde D (extra, naast WB)</span></label></div>
       </fieldset></div>`;
   }
 
