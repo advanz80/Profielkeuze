@@ -330,9 +330,9 @@ ol.plan b { font-family: var(--font-display); }
     ] },
     EX: { name: "Exacte wetenschappen", cl: "beta", desc: "Natuurkunde, sterrenkunde, wiskunde en chemie: fundamenteel onderzoek.", studies: [
       { n: "Natuur- en sterrenkunde", l: "wo", p: ["NT"], wis: "B" },
-      { n: "Wiskunde", l: "wo", wis: "B", note: "wiskunde D aanbevolen" },
+      { n: "Wiskunde", l: "wo", wis: "B", wd: true },
       { n: "Scheikunde", l: "wo", p: ["NT"], alt: { p: ["NG"], t: "met natuurkunde" }, wis: "B" },
-      { n: "Econometrie", l: "wo", wis: "B" },
+      { n: "Econometrie", l: "wo", wis: "B", wd: true },
       { n: "Applied Science / Chemie", l: "hbo", p: ["NT", "NG"] }
     ] },
     GZ: { name: "Gezondheid & Zorg", cl: "life", desc: "Mensen gezond maken en houden: van arts tot fysiotherapeut.", studies: [
@@ -632,6 +632,7 @@ ol.plan b { font-family: var(--font-display); }
       </fieldset></div>
       <div class="q" id="q-wis"><fieldset><legend>Welke wiskunde volg je?</legend>
         <div class="choice">${[["WA", "Wiskunde A"], ["WB", "Wiskunde B"], ["WC", "Wiskunde C"]].map(([k, n]) => `<input type="radio" name="wis" id="wis-${k}" value="${k}" ${A().wis === k ? "checked" : ""}><label for="wis-${k}"><b>${k}</b><span>${n}</span></label>`).join("")}</div>
+        <div class="choice"><input type="checkbox" name="wd" id="wis-WD" ${A().wd ? "checked" : ""}><label for="wis-WD"><b>+ WD</b><span>Ik volg ook wiskunde D (alleen samen met WB)</span></label></div>
       </fieldset></div>`;
   }
 
@@ -656,6 +657,7 @@ ol.plan b { font-family: var(--font-display); }
         A().prof = p; save(); renderStepper();
       }));
       app.querySelectorAll("input[name=wis]").forEach(inp => inp.addEventListener("change", () => { A().wis = inp.value; save(); renderStepper(); warn(""); }));
+      document.getElementById("wis-WD").addEventListener("change", e => { A().wd = e.target.checked; save(); warn(""); });
     } else {
       app.querySelectorAll("input[type=radio]").forEach(inp => inp.addEventListener("change", e => {
         A()[e.target.name] = Number(e.target.value); save(); renderStepper();
@@ -670,6 +672,7 @@ ol.plan b { font-family: var(--font-display); }
         document.getElementById("q-wis").classList.toggle("missing", !A().wis);
         if (!p.length || !A().wis) return warn("Kies je profiel en je wiskunde.");
         if (A().wis === "WC" && !p.includes("CM")) { document.getElementById("q-wis").classList.add("missing"); return warn("Wiskunde C bestaat alleen in het CM-profiel. Controleer je keuze."); }
+        if (A().wd && A().wis !== "WB") { document.getElementById("q-wis").classList.add("missing"); return warn("Wiskunde D kan alleen samen met wiskunde B."); }
         return go(si + 2);
       }
       const missing = allItems(s).filter(it => !A()[it.id]);
@@ -888,7 +891,7 @@ ol.plan b { font-family: var(--font-display); }
   function studyRow(s) {
     const ad = admission(s);
     return `<div class="srow"><span class="lvl">${s.l}</span><div><span class="sname">${s.n}</span>
-      <span class="smeta"><span class="pill ${ad.k}">${ad.t}</span>${s.fix ? `<span class="pill fix">Vaak selectie</span>` : ""}${s.note ? ` ${s.note}` : ""}</span></div></div>`;
+      <span class="smeta"><span class="pill ${ad.k}">${ad.t}</span>${s.fix ? `<span class="pill fix">Vaak selectie</span>` : ""}${s.wd ? (A().wd ? " Je wiskunde D is hier een mooie voorbereiding." : " Wiskunde D is een goede voorbereiding.") : ""}${s.note ? ` ${s.note}` : ""}</span></div></div>`;
   }
 
   function renderS5Result() {
@@ -916,7 +919,7 @@ ol.plan b { font-family: var(--font-display); }
     const suggestLAS = a("o_breed") >= 4 || clusters.size === 3;
     const dc = d => CLUSTER_COLOR[DOMAINS[d].cl];
     const P = A().prof || [];
-    const pakketTxt = `${P.join("/")} met ${{ WA: "wiskunde A", WB: "wiskunde B", WC: "wiskunde C" }[A().wis]}`;
+    const pakketTxt = `${P.join("/")} met ${{ WA: "wiskunde A", WB: "wiskunde B", WC: "wiskunde C" }[A().wis]}${A().wd && A().wis === "WB" ? " en wiskunde D" : ""}`;
 
     app.innerHTML = `
       <div class="result-hero">${hex(top3[0], dc(top3[0]), "width:70px;height:80px;font-size:1.3rem")}
