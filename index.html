@@ -18,6 +18,7 @@
   --c-ng: #2f8a57;
   --c-em: #b7791f;
   --c-cm: #a33a6b;
+  --c-os: #4b5fa8;
   --font-display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
   --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
   --step--1: .875rem; --step-0: 1rem; --step-1: 1.2rem; --step-2: 1.5rem; --step-3: 2.1rem;
@@ -26,13 +27,13 @@
   :root:not([data-theme="light"]) {
     --bg: #0c171d; --surface: #13232c; --ink: #e6eef2; --muted: #9db0ba; --line: #2a414d;
     --deep: #0a2b3b; --deep-ink: #e6eef2; --red: #ff5a67; --red-soft: #3a1a1f;
-    --c-nt: #5fb0de; --c-ng: #5cc58a; --c-em: #e3a84c; --c-cm: #e07aa8; color-scheme: dark;
+    --c-nt: #5fb0de; --c-ng: #5cc58a; --c-em: #e3a84c; --c-cm: #e07aa8; --c-os: #8f9ff0; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0c171d; --surface: #13232c; --ink: #e6eef2; --muted: #9db0ba; --line: #2a414d;
   --deep: #0a2b3b; --deep-ink: #e6eef2; --red: #ff5a67; --red-soft: #3a1a1f;
-  --c-nt: #5fb0de; --c-ng: #5cc58a; --c-em: #e3a84c; --c-cm: #e07aa8; color-scheme: dark;
+  --c-nt: #5fb0de; --c-ng: #5cc58a; --c-em: #e3a84c; --c-cm: #e07aa8; --c-os: #8f9ff0; color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: var(--step-0); line-height: 1.55; margin: 0; }
@@ -147,13 +148,58 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
   .scale label { min-height: 42px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* keuze tussen de twee tests */
+.modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 6px 0 26px; }
+.mode { background: var(--surface); border: 1.5px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 10px; align-content: start; }
+.mode h3 { font-size: var(--step-2); }
+.mode p { margin: 0; color: var(--muted); }
+.mode .triad { margin: 0; grid-template-columns: 1fr; gap: 6px; }
+.mode .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: var(--step--1); }
+
+/* pakket-keuze */
+.choice { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+.choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.choice label { display: grid; gap: 2px; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 8px; cursor: pointer; background: var(--bg); }
+.choice label b { font-family: var(--font-display); }
+.choice label span { font-size: var(--step--1); color: var(--muted); }
+.choice input:checked + label { border-color: var(--red); box-shadow: inset 0 0 0 1.5px var(--red); background: var(--red-soft); }
+.choice input:focus-visible + label { outline: 3px solid var(--red); outline-offset: 2px; }
+
+/* hbo-wo meter */
+.gauge { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 8px; }
+.gauge .scaleline { position: relative; height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--c-em), var(--line) 50%, var(--c-nt)); }
+.gauge .marker { position: absolute; top: 50%; width: 22px; height: 22px; border-radius: 50%; background: var(--surface); border: 4px solid var(--red); transform: translate(-50%, -50%); }
+.gauge .ends { margin: 0; font-family: var(--font-display); font-weight: 700; color: var(--ink); font-size: var(--step--1); }
+.gauge p { margin: 0; }
+
+/* domeinen en studies */
+.domain { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.domain + .domain { margin-top: 14px; }
+.domain-head { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; padding: 14px; }
+.domain-head h4 { font-family: var(--font-display); font-size: var(--step-1); margin: 0; }
+.domain-head p { margin: 2px 0 0; font-size: var(--step--1); color: var(--muted); }
+.srow { display: grid; grid-template-columns: 3rem 1fr; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--line); align-items: start; }
+.srow .lvl { font-family: var(--font-display); font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding-top: 2px; }
+.srow .sname { font-weight: 700; }
+.srow .smeta { display: block; font-size: var(--step--1); color: var(--muted); }
+.pill { display: inline-block; font-size: .75rem; font-weight: 700; padding: 1px 8px; border-radius: 99px; margin-top: 3px; margin-right: 4px; }
+.pill.ok { background: color-mix(in srgb, var(--c-ng) 18%, transparent); color: var(--c-ng); }
+.pill.check { background: color-mix(in srgb, var(--c-em) 20%, transparent); color: var(--c-em); }
+.pill.def { background: var(--red-soft); color: var(--red); }
+.pill.fix { background: var(--line); color: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--step--1); color: var(--muted); margin-top: 10px; }
+ol.plan { margin: 0; padding-left: 1.3rem; display: grid; gap: 8px; }
+ol.plan b { font-family: var(--font-display); }
+@media (max-width: 520px) { .srow { grid-template-columns: 1fr; gap: 2px; } }
 </style>
 
 <header class="masthead">
   <div class="masthead-inner">
-    <div class="eyebrow">Gymnasium Bernrode · LOB klas 3</div>
-    <h1>Profielkeuzetest</h1>
-    <p>Ontdek welk profiel bij je past. Je beantwoordt vragen over wie je bent, wat je kunt en wat je wilt. Daarna krijg je een advies voor je profiel, je wiskunde en je keuzevakken.</p>
+    <div class="eyebrow">Gymnasium Bernrode · LOB</div>
+    <h1 id="maintitle">Profiel- en studiekeuzetest</h1>
+    <p id="mainsub">Kies je profiel in klas 3 of oriënteer je op een vervolgopleiding in klas 5. Je beantwoordt vragen over wie je bent, wat je kunt en wat je wilt.</p>
   </div>
 </header>
 
@@ -167,6 +213,9 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
 (function () {
   "use strict";
 
+  // =====================================================================
+  //  Profielkeuze klas 3
+  // =====================================================================
   const PROFILES = {
     NT: { name: "Natuur & Techniek", color: "var(--c-nt)", blurb: "Natuurkunde, scheikunde, wiskunde B. Voor techniek, ICT en exacte wetenschap." },
     NG: { name: "Natuur & Gezondheid", color: "var(--c-ng)", blurb: "Biologie en scheikunde. Voor zorg, leven, voeding en natuur." },
@@ -175,13 +224,11 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
   };
   const PKEYS = ["NT", "NG", "EM", "CM"];
 
-  // Studierichtingen uit de presentatie (studies passend bij ...), met een indicatie van de toegang.
-  const SECTIONS = [
+  const P3_SECTIONS = [
     {
       id: "wie", title: "Wie ben ik?", short: "Wie ben ik?",
       intro: "Interesses, persoonlijkheid, passies en motivatie. Geef bij elke uitspraak aan hoeveel die bij jou past. Twijfel je? Kies het midden.",
-      ends: ["past niet bij mij", "past heel goed"],
-      items: [
+      groups: [{ ends: ["past niet bij mij", "past heel goed"], items: [
         { id: "i_tech", t: "Ik wil weten hoe machines, bruggen of computers werken.", w: { NT: 3 } },
         { id: "i_puzzel", t: "Ik puzzel graag op een lastig rekenprobleem tot ik het snap.", w: { NT: 3, NG: 1, EM: 1 } },
         { id: "i_code", t: "Programmeren of knutselen met technologie vind ik leuk.", w: { NT: 3 } },
@@ -198,51 +245,42 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
         { id: "i_verleden", t: "Ik ben nieuwsgierig naar het verleden: oude beschavingen, oorlogen, mythen.", w: { CM: 3, EM: 1 } },
         { id: "i_lezen", t: "Ik lees graag boeken of schrijf zelf verhalen.", w: { CM: 3 } },
         { id: "i_kunst", t: "Kunst, muziek, theater of film spelen een grote rol in mijn leven.", w: { CM: 3 } }
-      ]
+      ] }]
     },
     {
       id: "kan", title: "Wat kan ik?", short: "Wat kan ik?",
       intro: "Sterktes, competenties en vaardigheden. Kijk naar je cijfers én naar hoe graag je met een vak bezig bent.",
       groups: [
-        {
-          title: "Hoe gaat dit vak, en hoe graag doe je het?",
-          ends: ["moeizaam en niet leuk", "goed en leuk"],
-          items: [
-            { id: "v_wi", t: "Wiskunde", w: { NT: 3, NG: 2, EM: 2 } },
-            { id: "v_na", t: "Natuurkunde", w: { NT: 3, NG: 1 } },
-            { id: "v_sk", t: "Scheikunde", w: { NT: 2, NG: 3 } },
-            { id: "v_bi", t: "Biologie", w: { NG: 3 } },
-            { id: "v_ec", t: "Economie", w: { EM: 3, CM: 1 } },
-            { id: "v_ak", t: "Aardrijkskunde", w: { EM: 1, CM: 1, NG: 1 } },
-            { id: "v_gs", t: "Geschiedenis", w: { CM: 3, EM: 2 } },
-            { id: "v_ne", t: "Nederlands", w: { CM: 2, EM: 1 } },
-            { id: "v_en", t: "Engels", w: { CM: 1, EM: 1 } },
-            { id: "v_fa", t: "Frans", w: { CM: 1.5, EM: 1 } },
-            { id: "v_du", t: "Duits", w: { CM: 1.5, EM: 1 } },
-            { id: "v_la", t: "Latijn", w: { CM: 1 } },
-            { id: "v_gr", t: "Grieks", w: { CM: 1 } },
-            { id: "v_ku", t: "Kunst (beeldend, muziek of drama)", w: { CM: 2 } }
-          ]
-        },
-        {
-          title: "Hoe goed past dit bij jou?",
-          ends: ["past niet bij mij", "past heel goed"],
-          items: [
-            { id: "s_abstract", t: "Ik reken makkelijk met formules en letters (algebra).", w: { NT: 3, NG: 1, EM: 1 } },
-            { id: "s_toegepast", t: "Ik reken liever met grafieken, tabellen en kansen uit het dagelijks leven dan met abstracte formules.", w: { EM: 2, NG: 1, CM: 1 } },
-            { id: "s_precies", t: "Ik werk nauwkeurig en precies, bijvoorbeeld bij een practicum.", w: { NT: 2, NG: 2 } },
-            { id: "s_taal", t: "Woordjes en grammatica leren gaat me makkelijk af.", w: { CM: 2, EM: 1 } },
-            { id: "s_schrijven", t: "Ik kan goed een tekst analyseren of een betoog schrijven.", w: { CM: 2, EM: 2 } },
-            { id: "s_doorzetten", t: "Ik zet door als iets moeilijk wordt.", w: {} }
-          ]
-        }
+        { title: "Hoe gaat dit vak, en hoe graag doe je het?", ends: ["moeizaam en niet leuk", "goed en leuk"], items: [
+          { id: "v_wi", t: "Wiskunde", w: { NT: 3, NG: 2, EM: 2 } },
+          { id: "v_na", t: "Natuurkunde", w: { NT: 3, NG: 1 } },
+          { id: "v_sk", t: "Scheikunde", w: { NT: 2, NG: 3 } },
+          { id: "v_bi", t: "Biologie", w: { NG: 3 } },
+          { id: "v_ec", t: "Economie", w: { EM: 3, CM: 1 } },
+          { id: "v_ak", t: "Aardrijkskunde", w: { EM: 1, CM: 1, NG: 1 } },
+          { id: "v_gs", t: "Geschiedenis", w: { CM: 3, EM: 2 } },
+          { id: "v_ne", t: "Nederlands", w: { CM: 2, EM: 1 } },
+          { id: "v_en", t: "Engels", w: { CM: 1, EM: 1 } },
+          { id: "v_fa", t: "Frans", w: { CM: 1.5, EM: 1 } },
+          { id: "v_du", t: "Duits", w: { CM: 1.5, EM: 1 } },
+          { id: "v_la", t: "Latijn", w: { CM: 1 } },
+          { id: "v_gr", t: "Grieks", w: { CM: 1 } },
+          { id: "v_ku", t: "Kunst (beeldend, muziek of drama)", w: { CM: 2 } }
+        ] },
+        { title: "Hoe goed past dit bij jou?", ends: ["past niet bij mij", "past heel goed"], items: [
+          { id: "s_abstract", t: "Ik reken makkelijk met formules en letters (algebra).", w: { NT: 3, NG: 1, EM: 1 } },
+          { id: "s_toegepast", t: "Ik reken liever met grafieken, tabellen en kansen uit het dagelijks leven dan met abstracte formules.", w: { EM: 2, NG: 1, CM: 1 } },
+          { id: "s_precies", t: "Ik werk nauwkeurig en precies, bijvoorbeeld bij een practicum.", w: { NT: 2, NG: 2 } },
+          { id: "s_taal", t: "Woordjes en grammatica leren gaat me makkelijk af.", w: { CM: 2, EM: 1 } },
+          { id: "s_schrijven", t: "Ik kan goed een tekst analyseren of een betoog schrijven.", w: { CM: 2, EM: 2 } },
+          { id: "s_doorzetten", t: "Ik zet door als iets moeilijk wordt.", w: {} }
+        ] }
       ]
     },
     {
       id: "wil", title: "Wat wil ik?", short: "Wat wil ik?",
       intro: "Interessante beroepen, branches en richtingen. Hoe aantrekkelijk lijkt deze studierichting je? Je hoeft nog niets zeker te weten.",
-      ends: ["lijkt me niks", "lijkt me geweldig"],
-      items: [
+      groups: [{ ends: ["lijkt me niks", "lijkt me geweldig"], items: [
         { id: "w_genees", t: "Geneeskunde of tandheelkunde", w: { NG: 3, NT: 1 }, access: "NG, of NT met biologie" },
         { id: "w_dier", t: "Diergeneeskunde of animal sciences", w: { NG: 3 }, access: "NG, of NT met biologie" },
         { id: "w_farma", t: "Farmacie of biomedische wetenschappen", w: { NG: 3, NT: 1 }, access: "NG, of NT met biologie" },
@@ -250,7 +288,7 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
         { id: "w_natuur", t: "Bos- en natuurbeheer, marine sciences of plantwetenschappen", w: { NG: 3, NT: 1 }, access: "NG of NT" },
         { id: "w_bouw", t: "Bouwkunde, werktuigbouwkunde of civiele techniek", w: { NT: 3 }, access: "NT, of NG met natuurkunde en wiskunde B" },
         { id: "w_info", t: "Informatica, computer science of AI", w: { NT: 3, EM: .5 }, access: "NT; andere profielen vaak met wiskunde B", needsB: true },
-        { id: "w_exact", t: "Natuurkunde, sterrenkunde of wiskunde", w: { NT: 3 }, access: "NT" , needsB: true },
+        { id: "w_exact", t: "Natuurkunde, sterrenkunde of wiskunde", w: { NT: 3 }, access: "NT", needsB: true },
         { id: "w_econometrie", t: "Econometrie of data science", w: { NT: 2, EM: 2 }, access: "elk profiel met wiskunde B", needsB: true },
         { id: "w_econ", t: "Economie, bedrijfskunde of international business", w: { EM: 3 }, access: "EM, NG of NT; CM met wiskunde A" },
         { id: "w_rechten", t: "Rechten", w: { EM: 2, CM: 2 }, access: "elk profiel" },
@@ -260,106 +298,384 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
         { id: "w_comm", t: "Communicatie of journalistiek", w: { CM: 2, EM: 2 }, access: "elk profiel" },
         { id: "w_pol", t: "Politicologie, sociologie of bestuurskunde", w: { CM: 2, EM: 2 }, access: "elk profiel" },
         { id: "w_geo", t: "Geografie, milieukunde of global sustainability", w: { NG: 2, CM: 1, EM: 1, NT: .5 }, access: "elk profiel; soms wiskunde A of B gevraagd" }
-      ]
+      ] }]
     }
   ];
-  SECTIONS.forEach(s => { if (!s.groups) s.groups = [{ title: null, ends: s.ends, items: s.items }]; });
 
   const VAK_NAMES = { WI: "Wiskunde", NA: "Natuurkunde", SK: "Scheikunde", BI: "Biologie", EC: "Economie", AK: "Aardrijkskunde", GS: "Geschiedenis", FA: "Frans", DU: "Duits", LA: "Latijn", GR: "Grieks", KU: "Kunst", BE: "Bedrijfseconomie", WD: "Wiskunde D" };
   const PROFILE_VAKKEN = { NT: ["SK", "NA"], NG: ["SK", "BI"], EM: ["GS", "EC"], CM: ["GS"] };
 
-  // ---------- state ----------
-  const STORE = "bernrode-profieltest-v1";
-  let answers = {};
-  let step = 0; // 0 intro, 1..3 secties, 4 uitslag
-  try { const s = JSON.parse(localStorage.getItem(STORE) || "null"); if (s && s.answers) { answers = s.answers; step = s.step || 0; } } catch (e) {}
-  function save() { try { localStorage.setItem(STORE, JSON.stringify({ answers, step })); } catch (e) {} }
+  // =====================================================================
+  //  Studiekeuze klas 5
+  // =====================================================================
+  // Clusters krijgen de kleur van het profiel waar ze het dichtst bij liggen.
+  const CLUSTER_COLOR = { beta: "var(--c-nt)", life: "var(--c-ng)", gamma: "var(--c-em)", alpha: "var(--c-cm)", mens: "var(--c-os)" };
 
-  const allItems = s => s.groups.flatMap(g => g.items);
-  const sectionDone = s => allItems(s).every(it => answers[it.id]);
-  const a = id => answers[id] || 3;
+  // Toelating per opleiding (indicatie): p = profielen zonder extra eisen (leeg = elk profiel),
+  // alt = profielen die er met een extra vak in kunnen, wis = minimaal wiskunde A of B.
+  const DOMAINS = {
+    TB: { name: "Techniek & Bouw", cl: "beta", desc: "Machines, gebouwen, infrastructuur en producten ontwerpen en verbeteren.", studies: [
+      { n: "Werktuigbouwkunde", l: "wo", p: ["NT"], alt: { p: ["NG"], t: "met natuurkunde" }, wis: "B" },
+      { n: "Bouwkunde of civiele techniek", l: "wo", p: ["NT"], alt: { p: ["NG"], t: "met natuurkunde" }, wis: "B" },
+      { n: "Industrieel ontwerpen", l: "wo", p: ["NT"], alt: { p: ["NG"], t: "met natuurkunde" }, wis: "B" },
+      { n: "Werktuigbouwkunde", l: "hbo", p: ["NT"], alt: { p: ["NG"], t: "met natuurkunde" } },
+      { n: "Bouwkunde / Built Environment", l: "hbo", p: ["NT"], alt: { p: ["NG", "EM"], t: "vaak met natuurkunde of wiskunde B" } }
+    ] },
+    IC: { name: "ICT & Data", cl: "beta", desc: "Software, AI, data en slimme systemen.", studies: [
+      { n: "Informatica / Computer Science", l: "wo", wis: "B" },
+      { n: "Artificial Intelligence", l: "wo", wis: "B" },
+      { n: "Data Science", l: "wo", wis: "B" },
+      { n: "HBO-ICT", l: "hbo" },
+      { n: "Creative Media & Game Technologies", l: "hbo" }
+    ] },
+    EX: { name: "Exacte wetenschappen", cl: "beta", desc: "Natuurkunde, sterrenkunde, wiskunde en chemie: fundamenteel onderzoek.", studies: [
+      { n: "Natuur- en sterrenkunde", l: "wo", p: ["NT"], wis: "B" },
+      { n: "Wiskunde", l: "wo", wis: "B", note: "wiskunde D aanbevolen" },
+      { n: "Scheikunde", l: "wo", p: ["NT"], alt: { p: ["NG"], t: "met natuurkunde" }, wis: "B" },
+      { n: "Econometrie", l: "wo", wis: "B" },
+      { n: "Applied Science / Chemie", l: "hbo", p: ["NT", "NG"] }
+    ] },
+    GZ: { name: "Gezondheid & Zorg", cl: "life", desc: "Mensen gezond maken en houden: van arts tot fysiotherapeut.", studies: [
+      { n: "Geneeskunde", l: "wo", p: ["NG"], alt: { p: ["NT"], t: "met biologie" }, fix: true },
+      { n: "Tandheelkunde", l: "wo", p: ["NG"], alt: { p: ["NT"], t: "met biologie" }, fix: true },
+      { n: "Farmacie", l: "wo", p: ["NG"], alt: { p: ["NT"], t: "met biologie" } },
+      { n: "Biomedische wetenschappen", l: "wo", p: ["NG"], alt: { p: ["NT"], t: "met biologie" } },
+      { n: "Fysiotherapie", l: "hbo", p: ["NG"], alt: { p: ["NT", "EM", "CM"], t: "met biologie" }, fix: true },
+      { n: "Verpleegkunde", l: "hbo", note: "soms biologie gewenst" }
+    ] },
+    LN: { name: "Leven, Natuur & Voeding", cl: "life", desc: "Dieren, planten, ecosystemen en voedsel.", studies: [
+      { n: "Biologie", l: "wo", p: ["NG"], alt: { p: ["NT"], t: "met biologie" } },
+      { n: "Diergeneeskunde", l: "wo", p: ["NG"], alt: { p: ["NT"], t: "met biologie" }, fix: true },
+      { n: "Voeding en gezondheid", l: "wo", p: ["NG", "NT"] },
+      { n: "Bos- en natuurbeheer", l: "wo", p: ["NG", "NT"] },
+      { n: "Voeding en diëtetiek", l: "hbo", p: ["NG", "NT"] },
+      { n: "Dier- en veehouderij of diermanagement", l: "hbo", p: ["NG", "NT"] }
+    ] },
+    EB: { name: "Economie & Business", cl: "gamma", desc: "Bedrijven, geld, markten en organisaties.", studies: [
+      { n: "Economie en bedrijfseconomie", l: "wo", wis: "A" },
+      { n: "Bedrijfskunde", l: "wo", wis: "A" },
+      { n: "International Business", l: "wo", wis: "A", note: "soms wiskunde B" },
+      { n: "Fiscale economie", l: "wo", wis: "A" },
+      { n: "Accountancy / Finance & Control", l: "hbo" },
+      { n: "International Business", l: "hbo" }
+    ] },
+    RB: { name: "Recht & Bestuur", cl: "gamma", desc: "Wetten, rechtvaardigheid, politiek en overheid.", studies: [
+      { n: "Rechtsgeleerdheid", l: "wo" },
+      { n: "Bestuurskunde", l: "wo" },
+      { n: "Politicologie", l: "wo" },
+      { n: "Criminologie", l: "wo" },
+      { n: "HBO-Rechten", l: "hbo" },
+      { n: "Bestuurskunde / Overheidsmanagement", l: "hbo" }
+    ] },
+    GM: { name: "Gedrag & Maatschappij", cl: "gamma", desc: "Hoe mensen denken, leren en samenleven.", studies: [
+      { n: "Psychologie", l: "wo", wis: "A", note: "vaak wiskunde A of B gevraagd" },
+      { n: "Pedagogische wetenschappen", l: "wo" },
+      { n: "Sociologie", l: "wo" },
+      { n: "Culturele antropologie", l: "wo" },
+      { n: "Toegepaste psychologie", l: "hbo" },
+      { n: "Social Work", l: "hbo" }
+    ] },
+    TC: { name: "Taal, Geschiedenis & Cultuur", cl: "alpha", desc: "Talen, teksten, ideeën en het verleden.", studies: [
+      { n: "Geschiedenis", l: "wo" },
+      { n: "Griekse en Latijnse taal en cultuur", l: "wo", note: "hier telt je gymnasiumachtergrond echt" },
+      { n: "Filosofie", l: "wo" },
+      { n: "Archeologie", l: "wo" },
+      { n: "Engelse, Franse of Duitse taal en cultuur", l: "wo" },
+      { n: "Leraar geschiedenis of een taal (tweedegraads)", l: "hbo" }
+    ] },
+    KM: { name: "Kunst, Media & Ontwerp", cl: "alpha", desc: "Beeld, muziek, theater, film en design.", studies: [
+      { n: "Kunstgeschiedenis", l: "wo" },
+      { n: "Media en cultuur / Theaterwetenschap", l: "wo" },
+      { n: "Kunstacademie (beeldende kunst, design)", l: "hbo", note: "toelating met portfolio" },
+      { n: "Conservatorium", l: "hbo", note: "toelating met auditie" },
+      { n: "Communication & Multimedia Design", l: "hbo" }
+    ] },
+    CJ: { name: "Communicatie & Journalistiek", cl: "gamma", desc: "Informeren, overtuigen en verhalen vertellen.", studies: [
+      { n: "Communicatiewetenschap", l: "wo", wis: "A", note: "vaak wiskunde A of B gevraagd" },
+      { n: "Communicatie- en informatiewetenschappen", l: "wo" },
+      { n: "Journalistiek", l: "hbo" },
+      { n: "Communicatie", l: "hbo" }
+    ] },
+    OS: { name: "Onderwijs & Sport", cl: "mens", desc: "Lesgeven, coachen en bewegen.", studies: [
+      { n: "Bewegingswetenschappen", l: "wo", p: ["NG", "NT"], alt: { p: ["EM", "CM"], t: "met biologie, soms ook natuurkunde" } },
+      { n: "Onderwijswetenschappen", l: "wo" },
+      { n: "Pabo (leraar basisonderwijs)", l: "hbo", note: "toelatingstoets voor aardrijkskunde, geschiedenis en natuur & techniek als je die vakken niet hebt" },
+      { n: "ALO (leraar lichamelijke opvoeding)", l: "hbo", note: "met sportieve toelatingstest" },
+      { n: "Sportkunde", l: "hbo" }
+    ] },
+    AD: { name: "Aarde, Ruimte & Duurzaamheid", cl: "life", desc: "Klimaat, energie, steden en landschappen.", studies: [
+      { n: "Sociale geografie en planologie", l: "wo" },
+      { n: "Aardwetenschappen", l: "wo", p: ["NT", "NG"], wis: "B", note: "soms natuurkunde gevraagd" },
+      { n: "Future Planet Studies / Global Sustainability Science", l: "wo", note: "soms wiskunde A of B gevraagd" },
+      { n: "Ruimtelijke ordening en planologie", l: "hbo" },
+      { n: "Milieukunde", l: "hbo", p: ["NG", "NT"], alt: { p: ["EM", "CM"], t: "soms met biologie of scheikunde" } }
+    ] }
+  };
+  const DKEYS = Object.keys(DOMAINS);
+  const LAS = { n: "Liberal Arts & Sciences (University College)", l: "wo", note: "breed beginnen, Engelstalig, met selectiegesprek" };
 
-  // ---------- stepper ----------
-  const STEP_LABELS = ["Start", "Wie ben ik?", "Wat kan ik?", "Wat wil ik?", "Uitslag"];
+  const S5_SECTIONS = [
+    { id: "pakket", title: "Mijn pakket", short: "Pakket", custom: "pakket",
+      intro: "Je profiel en wiskunde bepalen bij welke opleidingen je zonder extra eisen binnenkomt. Zo kan de uitslag je waarschuwen voor deficiënties." },
+    {
+      id: "wie5", title: "Wie ben ik?", short: "Wie ben ik?",
+      intro: "Wat boeit je, ook buiten school? Geef bij elke uitspraak aan hoeveel die bij jou past. Twijfel je? Kies het midden.",
+      groups: [{ ends: ["past niet bij mij", "past heel goed"], items: [
+        { id: "x_tech", t: "Ik wil weten hoe machines, gebouwen of voertuigen in elkaar zitten.", w: { TB: 3, EX: 1 } },
+        { id: "x_bouwen", t: "Ik ontwerp of bouw graag dingen, ook in mijn vrije tijd.", w: { TB: 3, KM: 1 } },
+        { id: "x_code", t: "Programmeren of met computers werken vind ik leuk.", w: { IC: 3 } },
+        { id: "x_data", t: "Data, patronen en algoritmes vind ik interessant.", w: { IC: 2, EX: 1, EB: 1 } },
+        { id: "x_puzzel", t: "Ik puzzel graag op natuurkundige of wiskundige problemen.", w: { EX: 3, TB: 1 } },
+        { id: "x_heelal", t: "Vragen over het heelal, materie of getallen fascineren me.", w: { EX: 3 } },
+        { id: "x_lichaam", t: "Het menselijk lichaam en ziektes vind ik boeiend.", w: { GZ: 3, LN: 1 } },
+        { id: "x_zorg", t: "Als iemand zich niet goed voelt, wil ik helpen.", w: { GZ: 2, GM: 1 } },
+        { id: "x_natuur", t: "Ik ben geïnteresseerd in dieren, planten of ecosystemen.", w: { LN: 3, AD: 1 } },
+        { id: "x_voedsel", t: "Voeding, landbouw of voedselproductie interesseren me.", w: { LN: 2, GZ: 1 } },
+        { id: "x_economie", t: "Ik volg nieuws over bedrijven, beurzen of de economie.", w: { EB: 3 } },
+        { id: "x_leiden", t: "Ik zie mezelf later een bedrijf of team leiden.", w: { EB: 2, RB: 1 } },
+        { id: "x_recht", t: "Ik discussieer graag over regels, rechten en rechtvaardigheid.", w: { RB: 3, GM: 1 } },
+        { id: "x_politiek", t: "Politiek en hoe een land bestuurd wordt boeien me.", w: { RB: 2, GM: 1, TC: 1 } },
+        { id: "x_gedrag", t: "Ik vraag me vaak af waarom mensen doen wat ze doen.", w: { GM: 3 } },
+        { id: "x_culturen", t: "Hoe groepen en culturen werken vind ik interessant.", w: { GM: 2, TC: 1 } },
+        { id: "x_lezen", t: "Ik lees graag literatuur, ook in andere talen.", w: { TC: 3, CJ: 1 } },
+        { id: "x_oudheid", t: "Geschiedenis en de klassieke oudheid fascineren me.", w: { TC: 3 } },
+        { id: "x_maken", t: "Ik maak muziek, beeldend werk, film of theater.", w: { KM: 3 } },
+        { id: "x_design", t: "Ik let erg op vormgeving, design en sfeer.", w: { KM: 2, TB: 1 } },
+        { id: "x_schrijven", t: "Ik schrijf graag, bijvoorbeeld artikelen, blogs of verhalen.", w: { CJ: 2, TC: 1 } },
+        { id: "x_media", t: "Media, sociale media en nieuws interesseren me.", w: { CJ: 3 } },
+        { id: "x_uitleggen", t: "Ik leg graag dingen uit aan anderen.", w: { OS: 3 } },
+        { id: "x_sport", t: "Sport en bewegen zijn belangrijk in mijn leven.", w: { OS: 2, GZ: 1 } },
+        { id: "x_klimaat", t: "Klimaat, energie en duurzaamheid houden me bezig.", w: { AD: 3, TB: 1, LN: 1 } },
+        { id: "x_kaart", t: "Kaarten, steden en landschappen vind ik interessant.", w: { AD: 2 } }
+      ] }]
+    },
+    {
+      id: "wil5", title: "Wat wil ik?", short: "Wat wil ik?",
+      intro: "Wat wil je later met je werk bereiken? Denk niet aan één beroep, maar aan wat je dagelijks zou willen doen.",
+      groups: [{ ends: ["wil ik niet", "wil ik heel graag"], items: [
+        { id: "y_maken", t: "Iets maken of bouwen dat je echt kunt zien.", w: { TB: 3, KM: 1 } },
+        { id: "y_software", t: "Software, apps of slimme systemen ontwikkelen.", w: { IC: 3 } },
+        { id: "y_ontdekken", t: "Nieuwe kennis ontdekken in een lab of met berekeningen.", w: { EX: 3, GZ: 1, LN: 1 } },
+        { id: "y_beter", t: "Mensen beter maken of gezond houden.", w: { GZ: 3, OS: 1 } },
+        { id: "y_buiten", t: "Buiten werken, of met dieren en planten.", w: { LN: 3, AD: 1 } },
+        { id: "y_verdienen", t: "Goed verdienen en een organisatie leiden.", w: { EB: 3, RB: 1 } },
+        { id: "y_onrecht", t: "Onrecht aanpakken of regels maken voor de samenleving.", w: { RB: 3, GM: 1 } },
+        { id: "y_begeleiden", t: "Mensen begeleiden bij hun problemen.", w: { GM: 3, GZ: 1 } },
+        { id: "y_ideeen", t: "Werken met teksten, talen en ideeën uit het verleden.", w: { TC: 3 } },
+        { id: "y_creatief", t: "Creatief werk maken: beeld, muziek, ontwerp of theater.", w: { KM: 3 } },
+        { id: "y_vertellen", t: "Verhalen vertellen en mensen informeren.", w: { CJ: 3, KM: 1 } },
+        { id: "y_jongeren", t: "Werken met kinderen of jongeren.", w: { OS: 3, GM: 1 } },
+        { id: "y_bewegen", t: "Sport en bewegen een plek geven in mijn werk.", w: { OS: 2, GZ: 1 } },
+        { id: "y_klimaat", t: "Meehelpen het klimaatprobleem op te lossen.", w: { AD: 3, TB: 1, LN: 1 } },
+        { id: "y_internationaal", t: "Internationaal werken, met mensen uit andere landen.", w: { EB: 1, RB: 1, CJ: 1, TC: 1 } }
+      ] }]
+    },
+    {
+      id: "hoe5", title: "Hoe wil ik studeren?", short: "Hoe studeer ik?",
+      intro: "Met je vwo-diploma kun je naar het hbo én het wo. De eerste vragen meten wat bij je manier van leren past. Daarna volgen vragen over de omgeving waarin je wilt studeren.",
+      groups: [
+        { title: "Zo leer ik het liefst", ends: ["past niet bij mij", "past heel goed"], items: [
+          { id: "h_waarom", t: "Ik wil begrijpen waarom iets werkt, ook als ik het niet meteen kan toepassen.", d: 1 },
+          { id: "h_doen", t: "Ik leer het best door te doen: opdrachten, projecten, stages.", d: -1 },
+          { id: "h_lezen", t: "Ik lees graag lange en moeilijke teksten.", d: 1 },
+          { id: "h_beroep", t: "Ik wil na mijn studie direct aan de slag in een concreet beroep.", d: -1 },
+          { id: "h_onderzoek", t: "Een vraag tot op de bodem uitzoeken in een onderzoek lijkt me leuk.", d: 1 },
+          { id: "h_structuur", t: "Ik vind het prettig als een opleiding veel structuur en begeleiding geeft.", d: -1 },
+          { id: "h_zelfstandig", t: "Ik kan veel stof zelfstandig plannen en leren, zonder dat iemand controleert.", d: 1 },
+          { id: "h_vaardig", t: "Ik wil vooral praktische vaardigheden leren, zoals ontwerpen, verplegen of lesgeven.", d: -1 },
+          { id: "h_theorie", t: "Abstracte theorieën en modellen vind ik boeiend.", d: 1 },
+          { id: "h_opdracht", t: "Ik werk graag in een team aan een opdracht van een echt bedrijf.", d: -1 }
+        ] },
+        { title: "Mijn ideale studieomgeving", ends: ["past niet bij mij", "past heel goed"], items: [
+          { id: "o_engels", t: "In het Engels studeren is voor mij geen probleem.",
+            tip: "Veel wo-bachelors zijn Engelstalig. Dat vergroot je keuze, ook in het buitenland." },
+          { id: "o_klein", t: "Ik wil liefst kleine groepen en veel contact met docenten.",
+            tip: "Kijk naar kleinschalige opleidingen en vraag op open dagen naar groepsgrootte en contacturen." },
+          { id: "o_stad", t: "Op kamers gaan in een studentenstad lijkt me leuk.",
+            tip: "Bezoek open dagen in verschillende steden en let ook op de sfeer van de stad en het studentenleven." },
+          { id: "o_thuis", t: "Ik blijf liever thuis wonen en reis elke dag.",
+            tip: "Vanuit de regio zijn onder meer ’s-Hertogenbosch (Avans, HAS green academy), Tilburg (Tilburg University, Fontys), Eindhoven (TU/e, Fontys) en Nijmegen (Radboud Universiteit, HAN) goed te bereizen." },
+          { id: "o_buitenland", t: "Een (deel van mijn) studie in het buitenland lijkt me wat.",
+            tip: "Bijna elke opleiding heeft een uitwisseling. Een hele bachelor in het buitenland kan ook; begin dan al in klas 5 met informatie zoeken." },
+          { id: "o_breed", t: "Ik wil liever breed beginnen en later pas specialiseren.",
+            tip: "Kijk naar brede bachelors of Liberal Arts & Sciences aan een University College." },
+          { id: "o_tussenjaar", t: "Ik twijfel of ik na klas 6 direct wil gaan studeren.",
+            tip: "Een tussenjaar kan zinvol zijn als je het goed invult. Bespreek met de decaan wat bij jou past." }
+        ] }
+      ]
+    }
+  ];
+
+  const MODES = {
+    p3: { label: "Profielkeuze", klas: "klas 3", title: "Profielkeuzetest", sections: P3_SECTIONS },
+    s5: { label: "Studiekeuze", klas: "klas 5", title: "Studiekeuzetest", sections: S5_SECTIONS }
+  };
+
+  // =====================================================================
+  //  State
+  // =====================================================================
+  const STORE = "bernrode-keuzetest-v2";
+  let state = { mode: null, step: 0, answers: { p3: {}, s5: {} } };
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE) || "null");
+    if (s && s.answers) state = Object.assign(state, s);
+    else {
+      const old = JSON.parse(localStorage.getItem("bernrode-profieltest-v1") || "null");
+      if (old && old.answers) state.answers.p3 = old.answers;
+    }
+  } catch (e) {}
+  function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
+
+  const A = () => state.answers[state.mode];
+  const a = id => A()[id] || 3;
+  const sections = () => MODES[state.mode].sections;
+  const allItems = s => s.custom ? [] : s.groups.flatMap(g => g.items);
+  function sectionDone(s) {
+    if (s.custom === "pakket") { const p = A().prof || []; return p.length >= 1 && p.length <= 2 && !!A().wis; }
+    return allItems(s).every(it => A()[it.id]);
+  }
+  function maxReachable() {
+    const ss = sections();
+    for (let i = 0; i < ss.length; i++) if (!sectionDone(ss[i])) return i + 1;
+    return ss.length + 1;
+  }
+  function go(i) { state.step = i; save(); render(); window.scrollTo({ top: 0 }); }
+
+  // =====================================================================
+  //  Stepper en algemene weergave
+  // =====================================================================
+  const app = document.getElementById("app");
+
   function renderStepper() {
     const ol = document.getElementById("stepper");
     ol.innerHTML = "";
-    STEP_LABELS.forEach((lbl, i) => {
+    const labels = state.mode ? ["Start"].concat(sections().map(s => s.short), ["Uitslag"]) : ["Kies je test"];
+    const last = labels.length - 1;
+    labels.forEach((lbl, i) => {
       let fill = 0;
-      if (i === 0) fill = step > 0 ? 100 : 30;
-      else if (i <= 3) { const its = allItems(SECTIONS[i - 1]); fill = Math.round(100 * its.filter(it => answers[it.id]).length / its.length); }
-      else fill = step === 4 ? 100 : 0;
-      const reachable = i <= 3 ? (i === 0 || i <= maxReachable()) : SECTIONS.every(sectionDone);
+      if (i === 0) fill = state.mode ? 100 : 30;
+      else if (i < last) {
+        const s = sections()[i - 1];
+        if (s.custom) fill = sectionDone(s) ? 100 : 0;
+        else { const its = allItems(s); fill = Math.round(100 * its.filter(it => A()[it.id]).length / its.length); }
+      } else fill = state.step === last ? 100 : 0;
+      const reachable = i === 0 || i <= maxReachable();
       const li = document.createElement("li");
-      if (i === step) li.className = "current";
-      li.innerHTML = `<button type="button" ${reachable ? "" : "disabled"} aria-current="${i === step ? "step" : "false"}"><span class="bar"><i style="width:${fill}%"></i></span><span class="lbl">${lbl}</span></button>`;
+      if (i === state.step) li.className = "current";
+      li.innerHTML = `<button type="button" ${reachable ? "" : "disabled"} aria-current="${i === state.step ? "step" : "false"}"><span class="bar"><i style="width:${fill}%"></i></span><span class="lbl">${lbl}</span></button>`;
       li.querySelector("button").addEventListener("click", () => go(i));
       ol.appendChild(li);
     });
   }
-  function maxReachable() { let m = 1; for (let i = 0; i < 3; i++) { if (sectionDone(SECTIONS[i])) m = i + 2; else break; } return m; }
-  function go(i) { step = i; save(); render(); window.scrollTo({ top: 0 }); }
 
-  // ---------- views ----------
-  const app = document.getElementById("app");
-  function render() { renderStepper(); if (step === 0) renderIntro(); else if (step <= 3) renderSection(step - 1); else renderResult(); }
+  function render() {
+    document.getElementById("maintitle").textContent = state.mode && state.step > 0 ? MODES[state.mode].title : "Profiel- en studiekeuzetest";
+    renderStepper();
+    if (!state.mode || state.step === 0) return renderStart();
+    const n = sections().length;
+    if (state.step <= n) renderSection(state.step - 1);
+    else if (state.mode === "p3") renderP3Result();
+    else renderS5Result();
+  }
 
-  function hex(code, size) { return `<span class="hex" style="background:${PROFILES[code].color}${size ? ";" + size : ""}">${code}</span>`; }
+  function hex(code, color, size) { return `<span class="hex" style="background:${color}${size ? ";" + size : ""}">${code}</span>`; }
+  const phex = (k, size) => hex(k, PROFILES[k].color, size);
 
-  function renderIntro() {
-    const started = Object.keys(answers).length > 0;
-    app.innerHTML = `
-      <div class="section-head"><h2>Zo werkt de test</h2>
-      <p>De test duurt ongeveer 10 tot 15 minuten. Hij volgt de drie vragen uit de profielkeuze-avond. Er zijn geen goede of foute antwoorden.</p></div>
-      <ul class="triad">
-        <li><strong>Wie ben ik?</strong><span>Interesses, persoonlijkheid, passies</span></li>
-        <li><strong>Wat kan ik?</strong><span>Vakken, sterktes, vaardigheden</span></li>
-        <li><strong>Wat wil ik?</strong><span>Studies, beroepen, richtingen</span></li>
-      </ul>
-      <h3 class="group-title" style="margin-top:0">De vier profielen</h3>
-      <div class="intro-grid">${PKEYS.map(k => `<div class="pcard">${hex(k)}<h3>${PROFILES[k].name}</h3><p>${PROFILES[k].blurb}</p></div>`).join("")}</div>
-      <p class="note">De uitslag is een hulpmiddel, geen besluit. Neem hem mee naar je profielkeuzegesprek met je mentor of decaan. Je antwoorden blijven alleen in deze browser.</p>
-      <div class="nav">
-        ${started ? `<button class="btn btn-ghost" type="button" id="reset">Opnieuw beginnen</button>` : "<span></span>"}
-        <button class="btn btn-primary" type="button" id="start">${started ? "Verder waar je was" : "Start de test"}</button>
+  function renderStart() {
+    const started = m => Object.keys(state.answers[m]).length > 0;
+    const card = (m, desc, triad) => `
+      <div class="mode">
+        <div class="eyebrow" style="color:var(--red)">${MODES[m].klas}</div>
+        <h3>${MODES[m].label}</h3>
+        <p>${desc}</p>
+        <ul class="triad">${triad.map(([t, s]) => `<li><strong>${t}</strong><span>${s}</span></li>`).join("")}</ul>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" data-start="${m}">${started(m) ? "Verder waar je was" : "Start de test"}</button>
+          ${started(m) ? `<button class="linkbtn" type="button" data-reset="${m}">Opnieuw beginnen</button>` : ""}
+        </div>
       </div>`;
-    document.getElementById("start").onclick = () => go(started ? maxReachable() : 1);
-    const r = document.getElementById("reset");
-    if (r) r.onclick = () => { answers = {}; go(1); };
+    app.innerHTML = `
+      <div class="section-head"><h2>Welke test wil je doen?</h2>
+      <p>Beide tests duren ongeveer 10 tot 15 minuten. Er zijn geen goede of foute antwoorden. Je antwoorden blijven alleen in deze browser.</p></div>
+      <div class="modes">
+        ${card("p3", "Welk profiel past bij jou? Met advies voor je wiskunde en keuzevakken.", [["Wie ben ik?", "Interesses en persoonlijkheid"], ["Wat kan ik?", "Vakken en vaardigheden"], ["Wat wil ik?", "Studierichtingen die je aanspreken"]])}
+        ${card("s5", "Welke vervolgopleiding op hbo of wo past bij jou? Met studiedomeinen, een toelatingscheck en een stappenplan.", [["Mijn pakket", "Profiel en wiskunde"], ["Wie ben ik? Wat wil ik?", "Interesses en werkwensen"], ["Hoe wil ik studeren?", "Hbo of wo, en je ideale studieomgeving"]])}
+      </div>
+      <h3 class="group-title" style="margin-top:0">De vier profielen</h3>
+      <div class="intro-grid">${PKEYS.map(k => `<div class="pcard">${phex(k)}<h3>${PROFILES[k].name}</h3><p>${PROFILES[k].blurb}</p></div>`).join("")}</div>
+      <p class="note">De uitslag is een hulpmiddel, geen besluit. Neem hem mee naar je gesprek met je mentor of decaan.</p>`;
+    app.querySelectorAll("[data-start]").forEach(b => b.onclick = () => {
+      state.mode = b.dataset.start;
+      go(started(state.mode) ? maxReachable() : 1);
+    });
+    app.querySelectorAll("[data-reset]").forEach(b => b.onclick = () => {
+      state.answers[b.dataset.reset] = {}; state.mode = b.dataset.reset; go(1);
+    });
   }
 
   function scaleHTML(it, ends) {
     return `<div class="q" id="q-${it.id}"><fieldset>
       <legend>${it.t}</legend>
       <div class="scale" role="radiogroup">${[1, 2, 3, 4, 5].map(v => `
-        <input type="radio" name="${it.id}" id="${it.id}-${v}" value="${v}" ${answers[it.id] === v ? "checked" : ""}>
+        <input type="radio" name="${it.id}" id="${it.id}-${v}" value="${v}" ${A()[it.id] === v ? "checked" : ""}>
         <label for="${it.id}-${v}" title="${v === 1 ? ends[0] : v === 5 ? ends[1] : ""}">${v}</label>`).join("")}
       </div>
       <div class="ends" aria-hidden="true"><span>1 = ${ends[0]}</span><span>5 = ${ends[1]}</span></div>
     </fieldset></div>`;
   }
 
+  function pakketHTML() {
+    const prof = A().prof || [];
+    return `
+      <div class="q" id="q-prof"><fieldset><legend>Welk profiel volg je?<span class="sub">Dubbelprofiel, zoals NT/NG? Kies er twee.</span></legend>
+        <div class="choice">${PKEYS.map(k => `<input type="checkbox" name="prof" id="prof-${k}" value="${k}" ${prof.includes(k) ? "checked" : ""}><label for="prof-${k}"><b>${k}</b><span>${PROFILES[k].name}</span></label>`).join("")}</div>
+      </fieldset></div>
+      <div class="q" id="q-wis"><fieldset><legend>Welke wiskunde volg je?</legend>
+        <div class="choice">${[["WA", "Wiskunde A"], ["WB", "Wiskunde B"], ["WC", "Wiskunde C"]].map(([k, n]) => `<input type="radio" name="wis" id="wis-${k}" value="${k}" ${A().wis === k ? "checked" : ""}><label for="wis-${k}"><b>${k}</b><span>${n}</span></label>`).join("")}</div>
+      </fieldset></div>`;
+  }
+
   function renderSection(si) {
-    const s = SECTIONS[si];
+    const s = sections()[si];
+    const n = sections().length;
+    const isLast = si === n - 1;
     app.innerHTML = `
-      <div class="section-head"><div class="eyebrow" style="color:var(--red)">Deel ${si + 1} van 3</div><h2>${s.title}</h2><p>${s.intro}</p></div>
-      ${s.groups.map(g => `${g.title ? `<h3 class="group-title">${g.title}</h3>` : ""}${g.items.map(it => scaleHTML(it, g.ends)).join("")}`).join("")}
+      <div class="section-head"><div class="eyebrow" style="color:var(--red)">Deel ${si + 1} van ${n}</div><h2>${s.title}</h2><p>${s.intro}</p></div>
+      ${s.custom === "pakket" ? pakketHTML() : s.groups.map(g => `${g.title ? `<h3 class="group-title">${g.title}</h3>` : ""}${g.items.map(it => scaleHTML(it, g.ends)).join("")}`).join("")}
       <div class="nav">
         <button class="btn btn-ghost" type="button" id="prev">Terug</button>
         <p class="warn" id="warn" hidden></p>
-        <button class="btn btn-primary" type="button" id="next">${si === 2 ? "Bekijk je uitslag" : "Volgende"}</button>
+        <button class="btn btn-primary" type="button" id="next">${isLast ? "Bekijk je uitslag" : "Volgende"}</button>
       </div>`;
-    app.querySelectorAll("input[type=radio]").forEach(inp => inp.addEventListener("change", e => {
-      answers[e.target.name] = Number(e.target.value); save(); renderStepper();
-      document.getElementById("q-" + e.target.name).classList.remove("missing");
-    }));
+    const warn = msg => { const w = document.getElementById("warn"); w.hidden = !msg; w.textContent = msg || ""; };
+
+    if (s.custom === "pakket") {
+      app.querySelectorAll("input[name=prof]").forEach(inp => inp.addEventListener("change", () => {
+        let p = [...app.querySelectorAll("input[name=prof]:checked")].map(x => x.value);
+        if (p.length > 2) { inp.checked = false; p = p.filter(x => x !== inp.value); warn("Je kunt hooguit twee profielen kiezen."); } else warn("");
+        A().prof = p; save(); renderStepper();
+      }));
+      app.querySelectorAll("input[name=wis]").forEach(inp => inp.addEventListener("change", () => { A().wis = inp.value; save(); renderStepper(); warn(""); }));
+    } else {
+      app.querySelectorAll("input[type=radio]").forEach(inp => inp.addEventListener("change", e => {
+        A()[e.target.name] = Number(e.target.value); save(); renderStepper();
+        document.getElementById("q-" + e.target.name).classList.remove("missing");
+      }));
+    }
     document.getElementById("prev").onclick = () => go(si);
     document.getElementById("next").onclick = () => {
-      const missing = allItems(s).filter(it => !answers[it.id]);
+      if (s.custom === "pakket") {
+        const p = A().prof || [];
+        document.getElementById("q-prof").classList.toggle("missing", !p.length);
+        document.getElementById("q-wis").classList.toggle("missing", !A().wis);
+        if (!p.length || !A().wis) return warn("Kies je profiel en je wiskunde.");
+        if (A().wis === "WC" && !p.includes("CM")) { document.getElementById("q-wis").classList.add("missing"); return warn("Wiskunde C bestaat alleen in het CM-profiel. Controleer je keuze."); }
+        return go(si + 2);
+      }
+      const missing = allItems(s).filter(it => !A()[it.id]);
       if (missing.length) {
         missing.forEach(it => document.getElementById("q-" + it.id).classList.add("missing"));
-        const w = document.getElementById("warn"); w.hidden = false;
-        w.textContent = `Nog ${missing.length} ${missing.length === 1 ? "vraag" : "vragen"} open. Twijfel je? Kies 3.`;
+        warn(`Nog ${missing.length} ${missing.length === 1 ? "vraag" : "vragen"} open. Twijfel je? Kies 3.`);
         document.getElementById("q-" + missing[0].id).scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
@@ -367,32 +683,47 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
     };
   }
 
-  // ---------- scoring ----------
-  // Per deel: (antwoord-1) × gewicht, gedeeld door het maximum → percentage. Totaal = gemiddelde van de drie delen.
-  function sectionScores(s) {
+  // Score per onderdeel: (antwoord − 1) × gewicht, gedeeld door het maximum → percentage.
+  function pctScores(items, keys) {
     const out = {};
-    PKEYS.forEach(p => {
+    keys.forEach(k => {
       let got = 0, max = 0;
-      allItems(s).forEach(it => { const w = it.w[p] || 0; got += w * (a(it.id) - 1); max += w * 4; });
-      out[p] = max ? Math.round(100 * got / max) : 0;
+      items.forEach(it => { const w = (it.w && it.w[k]) || 0; got += w * (a(it.id) - 1); max += w * 4; });
+      out[k] = max ? Math.round(100 * got / max) : 0;
     });
     return out;
   }
   function norm(pairs) { let g = 0, m = 0; pairs.forEach(([id, w]) => { g += w * (a(id) - 1); m += w * 4; }); return Math.round(100 * g / m); }
 
-  function compute() {
-    const per = SECTIONS.map(sectionScores);
-    const total = {};
-    PKEYS.forEach(p => total[p] = Math.round(per.reduce((acc, s) => acc + s[p], 0) / 3));
-    const ranked = PKEYS.slice().sort((x, y) => total[y] - total[x]);
-    return { per, total, ranked };
+  function wireSummary(lines) {
+    const ta = document.getElementById("summary");
+    ta.value = lines.join("\n");
+    document.getElementById("copy").onclick = () => {
+      const done = msg => { document.getElementById("copied").textContent = msg; };
+      const fallback = () => { ta.focus(); ta.select(); done("Tekst geselecteerd. Druk op Ctrl+C (of Cmd+C) om te kopiëren."); };
+      try { navigator.clipboard.writeText(ta.value).then(() => done("Gekopieerd. Plak het in een mail of document."), fallback); } catch (e) { fallback(); }
+    };
+    document.getElementById("back").onclick = () => go(1);
+    document.getElementById("again").onclick = () => { state.answers[state.mode] = {}; go(0); };
   }
+  const summaryBlock = title => `
+      <section class="block"><h3>${title}</h3>
+        <textarea id="summary" readonly aria-label="Samenvatting van je uitslag"></textarea>
+        <div class="copyrow"><button class="btn btn-primary" type="button" id="copy">Kopieer samenvatting</button><span class="note" id="copied" role="status"></span></div>
+      </section>
+      <div class="nav">
+        <button class="btn btn-ghost" type="button" id="back">Antwoorden aanpassen</button>
+        <button class="btn btn-ghost" type="button" id="again">Test opnieuw doen</button>
+      </div>`;
 
+  // =====================================================================
+  //  Uitslag profielkeuze (klas 3)
+  // =====================================================================
   function mathAdvice(top) {
     const b = norm([["v_wi", 3], ["s_abstract", 3], ["i_puzzel", 2], ["v_na", 1]]);
     const app_ = norm([["s_toegepast", 2], ["v_wi", 1]]);
     const grit = a("s_doorzetten");
-    const wantsB = SECTIONS[2].items.filter(it => it.needsB && a(it.id) >= 4).map(it => it.t);
+    const wantsB = allItems(P3_SECTIONS[2]).filter(it => it.needsB && a(it.id) >= 4).map(it => it.t);
     let pick, why, extra = null;
     if (top === "NT") {
       pick = "WB"; why = "Wiskunde B is verplicht in Natuur & Techniek.";
@@ -459,17 +790,20 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
     return { html: rows.join(""), plan };
   }
 
-  function renderResult() {
-    const { per, total, ranked } = compute();
+  function renderP3Result() {
+    const per = P3_SECTIONS.map(s => pctScores(allItems(s), PKEYS));
+    const total = {};
+    PKEYS.forEach(p => total[p] = Math.round(per.reduce((acc, s) => acc + s[p], 0) / 3));
+    const ranked = PKEYS.slice().sort((x, y) => total[y] - total[x]);
     const top = ranked[0], second = ranked[1];
     const close = total[top] - total[second] <= 7;
     const m = mathAdvice(top);
     const pkg = packageFor(top, m);
-    const lovedStudies = SECTIONS[2].items.filter(it => a(it.id) >= 4).sort((x, y) => a(y.id) - a(x.id));
+    const lovedStudies = allItems(P3_SECTIONS[2]).filter(it => a(it.id) >= 4).sort((x, y) => a(y.id) - a(x.id));
     const fits = (it, p) => it.access.startsWith("elk") || it.access.includes(p);
 
     app.innerHTML = `
-      <div class="result-hero">${hex(top, "width:70px;height:80px;font-size:1.4rem")}
+      <div class="result-hero">${phex(top, "width:70px;height:80px;font-size:1.4rem")}
         <div><div class="eyebrow" style="color:var(--red)">Jouw beste match</div><h2>${PROFILES[top].name}</h2>
         <p>${close ? `Op de voet gevolgd door <b>${PROFILES[second].name}</b>. Beide profielen passen bij je.` : PROFILES[top].blurb}</p></div>
       </div>
@@ -479,7 +813,7 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
       </div>
       <div class="tablewrap"><table>
         <thead><tr><th>Profiel</th><th class="num">Wie ben ik?</th><th class="num">Wat kan ik?</th><th class="num">Wat wil ik?</th></tr></thead>
-        <tbody>${ranked.map(p => `<tr><td>${p}</td>${per.map((s, i) => { const isTop = PKEYS.every(q => s[p] >= s[q]); return `<td class="num${isTop ? " top" : ""}">${s[p]}%</td>`; }).join("")}</tr>`).join("")}</tbody>
+        <tbody>${ranked.map(p => `<tr><td>${p}</td>${per.map(s => { const isTop = PKEYS.every(q => s[p] >= s[q]); return `<td class="num${isTop ? " top" : ""}">${s[p]}%</td>`; }).join("")}</tr>`).join("")}</tbody>
       </table></div>
       <p class="note">Rood = jouw hoogste score in dat deel. Wijzen de drie delen verschillende kanten op? Bespreek dat zeker in je profielkeuzegesprek.</p>
       ${close ? `<div class="callout"><p><b>${top} en ${second} liggen dicht bij elkaar.</b> Kies wat je het meest openhoudt, of combineer met een extra vak. ${(top + second).match(/NT|NG/g)?.length === 2 ? "Met NT plus biologie heb je bijvoorbeeld ook de deuren van NG open." : ""}</p></div>` : ""}
@@ -514,18 +848,9 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
           <li>Vragen of een afspraak? Mail de decanen: <span class="mail">decanen@bernrode.nl</span></li>
         </ul>
       </section>
+      ${summaryBlock("Neem je uitslag mee naar het gesprek")}`;
 
-      <section class="block"><h3>Neem je uitslag mee naar het gesprek</h3>
-        <textarea id="summary" readonly aria-label="Samenvatting van je uitslag"></textarea>
-        <div class="copyrow"><button class="btn btn-primary" type="button" id="copy">Kopieer samenvatting</button><span class="note" id="copied" role="status"></span></div>
-      </section>
-
-      <div class="nav">
-        <button class="btn btn-ghost" type="button" id="back">Antwoorden aanpassen</button>
-        <button class="btn btn-ghost" type="button" id="again">Test opnieuw doen</button>
-      </div>`;
-
-    const sumLines = [
+    wireSummary([
       "PROFIELKEUZETEST GYMNASIUM BERNRODE – mijn uitslag",
       "",
       "Scores: " + ranked.map(p => `${p} ${total[p]}%`).join(" · "),
@@ -542,16 +867,118 @@ textarea#summary { width: 100%; min-height: 160px; font: .85rem/1.45 ui-monospac
       "Vragen voor het gesprek:",
       "- ",
       "- "
-    ];
-    const ta = document.getElementById("summary");
-    ta.value = sumLines.join("\n");
-    document.getElementById("copy").onclick = () => {
-      const done = msg => { document.getElementById("copied").textContent = msg; };
-      const fallback = () => { ta.focus(); ta.select(); done("Tekst geselecteerd. Druk op Ctrl+C (of Cmd+C) om te kopiëren."); };
-      try { navigator.clipboard.writeText(ta.value).then(() => done("Gekopieerd. Plak het in een mail of document."), fallback); } catch (e) { fallback(); }
-    };
-    document.getElementById("back").onclick = () => go(1);
-    document.getElementById("again").onclick = () => { answers = {}; go(0); };
+    ]);
+  }
+
+  // =====================================================================
+  //  Uitslag studiekeuze (klas 5)
+  // =====================================================================
+  function admission(s) {
+    const P = A().prof || [], W = A().wis;
+    const profOk = !s.p || s.p.some(x => P.includes(x));
+    const altOk = !!s.alt && s.alt.p.some(x => P.includes(x));
+    const wisOk = !s.wis || (s.wis === "A" ? (W === "WA" || W === "WB") : W === "WB");
+    const wisTxt = s.wis === "B" ? "wiskunde B vereist" : "wiskunde A of B vereist";
+    if (profOk && wisOk) return { k: "ok", t: "Past bij je pakket" };
+    if (altOk && wisOk) return { k: "check", t: "Mogelijk " + s.alt.t };
+    if (profOk || altOk) return { k: "def", t: "Deficiëntie: " + wisTxt };
+    return { k: "def", t: "Deficiëntie: profiel past niet" };
+  }
+
+  function studyRow(s) {
+    const ad = admission(s);
+    return `<div class="srow"><span class="lvl">${s.l}</span><div><span class="sname">${s.n}</span>
+      <span class="smeta"><span class="pill ${ad.k}">${ad.t}</span>${s.fix ? `<span class="pill fix">Vaak selectie</span>` : ""}${s.note ? ` ${s.note}` : ""}</span></div></div>`;
+  }
+
+  function renderS5Result() {
+    const intItems = allItems(S5_SECTIONS[1]), workItems = allItems(S5_SECTIONS[2]);
+    const pInt = pctScores(intItems, DKEYS), pWork = pctScores(workItems, DKEYS);
+    const total = {};
+    DKEYS.forEach(d => total[d] = Math.round((pInt[d] + pWork[d]) / 2));
+    const ranked = DKEYS.slice().sort((x, y) => total[y] - total[x]);
+    const top3 = ranked.slice(0, 3);
+
+    // hbo ↔ wo: gemiddelde afwijking van het midden, omgezet naar 0 (hbo) … 100 (wo)
+    const leren = S5_SECTIONS[3].groups[0].items;
+    const bal = leren.reduce((acc, it) => acc + (a(it.id) - 3) * it.d, 0) / (2 * leren.length);
+    const wo = Math.round(50 + 50 * bal);
+    const lean = wo >= 60 ? "wo" : wo <= 40 ? "hbo" : "beide";
+    const leanText = {
+      wo: "Je houdt van theorie, onderzoek en zelfstandig leren. Het wo (universiteit) past goed bij je.",
+      hbo: "Je leert graag door te doen en wilt een concreet beroep leren. Het hbo past goed bij je. Met een hbo-bachelor kun je later via een premaster alsnog een wo-master doen.",
+      beide: "Je voelt je thuis bij theorie én praktijk. Vergelijk hbo- en wo-opleidingen in dezelfde richting, bijvoorbeeld op open dagen."
+    }[lean];
+
+    const order = s => (lean === "hbo" ? (s.l === "hbo" ? 0 : 1) : (s.l === "wo" ? 0 : 1));
+    const omgeving = S5_SECTIONS[3].groups[1].items.filter(it => a(it.id) >= 4);
+    const clusters = new Set(top3.map(d => DOMAINS[d].cl));
+    const suggestLAS = a("o_breed") >= 4 || clusters.size === 3;
+    const dc = d => CLUSTER_COLOR[DOMAINS[d].cl];
+    const P = A().prof || [];
+    const pakketTxt = `${P.join("/")} met ${{ WA: "wiskunde A", WB: "wiskunde B", WC: "wiskunde C" }[A().wis]}`;
+
+    app.innerHTML = `
+      <div class="result-hero">${hex(top3[0], dc(top3[0]), "width:70px;height:80px;font-size:1.3rem")}
+        <div><div class="eyebrow" style="color:var(--red)">Jouw sterkste studiedomein</div><h2>${DOMAINS[top3[0]].name}</h2>
+        <p>Gevolgd door <b>${DOMAINS[top3[1]].name}</b> en <b>${DOMAINS[top3[2]].name}</b>. Jouw pakket: ${pakketTxt}.</p></div>
+      </div>
+
+      <div class="bars" aria-label="Score per studiedomein">
+        ${ranked.map(d => `<div class="barrow"><span class="name">${DOMAINS[d].name}</span><span class="track"><i style="width:${total[d]}%;background:${dc(d)}"></i></span><span class="pct">${total[d]}%</span></div>`).join("")}
+      </div>
+      <p class="note">Score = gemiddelde van je interesses (Wie ben ik?) en je werkwensen (Wat wil ik?).</p>
+
+      <section class="block"><h3>Hbo of wo?</h3>
+        <div class="gauge">
+          <div class="ends"><span>Hbo · praktijkgericht</span><span>Wo · theoretisch</span></div>
+          <div class="scaleline" role="img" aria-label="Score ${wo} op een schaal van 0 (hbo) tot 100 (wo)"><span class="marker" style="left:${wo}%"></span></div>
+          <p>${leanText}</p>
+        </div>
+      </section>
+
+      <section class="block"><h3>Jouw top 3 en opleidingen om te verkennen</h3>
+        ${top3.map(d => `<div class="domain">
+          <div class="domain-head">${hex(d, dc(d))}<div><h4>${DOMAINS[d].name}</h4><p>${DOMAINS[d].desc} Interesse ${pInt[d]}% · werkwensen ${pWork[d]}%</p></div></div>
+          ${DOMAINS[d].studies.slice().sort((x, y) => order(x) - order(y)).map(studyRow).join("")}
+        </div>`).join("")}
+        ${suggestLAS ? `<div class="domain" style="margin-top:14px"><div class="domain-head">${hex("LAS", "var(--deep)")}<div><h4>Breed beginnen?</h4><p>${a("o_breed") >= 4 ? "Je wilt graag breed beginnen." : "Je top 3 loopt uiteen over heel verschillende vakgebieden."} Een brede bachelor kan dan goed passen.</p></div></div>${studyRow(LAS)}</div>` : ""}
+        <div class="legend"><span><span class="pill ok">Past</span> zonder extra eisen</span><span><span class="pill check">Mogelijk</span> met een extra vak</span><span><span class="pill def">Deficiëntie</span> extra vak of cursus nodig</span><span><span class="pill fix">Vaak selectie</span> eerder aanmelden</span></div>
+        <p class="note">Dit is een indicatie: eisen verschillen per instelling. Een deficiëntie kun je soms wegwerken met een extra vak of cursus vóór de start. Controleer altijd op <a href="https://www.studiekeuze123.nl/profiel-naar-studie" target="_blank" rel="noopener">studiekeuze123.nl (profiel naar studie)</a>.</p>
+      </section>
+
+      ${omgeving.length ? `<section class="block"><h3>Jouw studieomgeving</h3><ul class="tips">${omgeving.map(it => `<li>${it.tip}</li>`).join("")}</ul></section>` : ""}
+
+      <section class="block"><h3>Stappenplan</h3>
+        <ol class="plan">
+          <li><b>Verkennen (klas 5).</b> Gebruik deze uitslag en studiekeuze123.nl om opleidingen te vergelijken. Plan een gesprek met de decaan.</li>
+          <li><b>Open dagen (klas 5 en 6).</b> Bezoek er meerdere, ook van opleidingen waarover je twijfelt.</li>
+          <li><b>Meelopen of proefstuderen.</b> Ervaar een echte college- of lesdag voordat je kiest.</li>
+          <li><b>Vergelijken.</b> Let op inhoud, toelatingseisen, selectie, studentenoordelen en de stad.</li>
+          <li><b>Opleiding met selectie (klas 6): aanmelden vóór 15 januari</b> via Studielink.</li>
+          <li><b>Overige opleidingen (klas 6): aanmelden vóór 1 mei</b> via Studielink. Daarna volgt vaak een studiekeuzecheck.</li>
+        </ol>
+        <p class="note">Vragen of een afspraak? Mail de decanen: <span class="mail">decanen@bernrode.nl</span></p>
+      </section>
+      ${summaryBlock("Neem je uitslag mee naar het gesprek met de decaan")}`;
+
+    wireSummary([
+      "STUDIEKEUZETEST GYMNASIUM BERNRODE – mijn uitslag",
+      "",
+      `Pakket: ${pakketTxt}`,
+      "Top 3 studiedomeinen: " + top3.map(d => `${DOMAINS[d].name} (${total[d]}%)`).join(", "),
+      `Hbo of wo: ${lean === "beide" ? "beide" : lean} (score ${wo} op 0 = hbo … 100 = wo)`,
+      "",
+      "Opleidingen om te verkennen:",
+      ...top3.flatMap(d => DOMAINS[d].studies.slice().sort((x, y) => order(x) - order(y)).map(s => `- ${s.n} (${s.l}) – ${admission(s).t}`)),
+      ...(suggestLAS ? [`- ${LAS.n} (wo)`] : []),
+      "",
+      "Studieomgeving: " + (omgeving.length ? omgeving.map(it => it.t).join(" ") : "geen sterke voorkeuren"),
+      "",
+      "Vragen voor het gesprek:",
+      "- ",
+      "- "
+    ]);
   }
 
   render();
